@@ -30,4 +30,4 @@ def karatsuba_multiply(x, y) -> int:
 
 
 print(karatsuba_multiply(1234, 5678))
-assert(karatsuba_multiply(-1234, 5678) == -1234 * 5678)
+assert(karatsuba_multiply(-1234, 678) == -1234 * 678)
