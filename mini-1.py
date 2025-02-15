@@ -1,3 +1,13 @@
+def divmod(current_part, divisor):
+    quotient = 0
+    remainder = current_part
+
+    while remainder >= divisor:
+        remainder -= divisor
+        quotient += 1
+
+    return quotient, remainder
+
 def long_division(str_a, str_b):
     a = int(str_a)
     b = int(str_b)
@@ -12,8 +22,7 @@ def long_division(str_a, str_b):
         current_part = remainder * 10 + int(str_a[i])
 
         if current_part >= b:
-            next_digit = current_part // b
-            remainder = current_part % b
+            next_digit, remainder = divmod(current_part, b)
             quotient.append(next_digit)
 
         else:
