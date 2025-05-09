@@ -1,4 +1,6 @@
 import time
+import math
+import statistics
 
 def run_algorithm(func, args):
     start_time = time.time()
@@ -114,6 +116,7 @@ def strassen_matrix_multiply(A, B):
 
 
 
+
 matrices = [
     ([[i for i in range(16)] for _ in range(16)], [[i for i in range(16)] for _ in range(16)]),
     ([[i for i in range(32)] for _ in range(32)], [[i for i in range(32)] for _ in range(32)]),
@@ -158,4 +161,37 @@ def format_table(benchmarks, algos, results):
 if __name__ == '__main__':
     format_table(benchmarks, algos, formatted_results)
 
-#vivod: алгоритм Штрассена начинает выигрывать с матрицы размером примерно 32*32, хорошо видимый выигрыш появляется с размера 64*64
+    print("\nДополнительная статистика:")
+
+    algo_times = {algo: [] for algo in algos}
+    for matrix_result in results:
+        for algo in algos:
+            algo_times[algo].append(matrix_result[algo])
+
+    print(f"{'Алгоритм':<25} | {'Среднее':<8} | {'Ст. отклонение':<15} | {'Ср. геом.':<10}")
+    print("-" * 70)
+
+    for algo in algos:
+        times = algo_times[algo]
+        mean = statistics.mean(times)
+        stdev = statistics.stdev(times) if len(times) > 1 else 0
+        geo_mean = math.exp(sum(math.log(x) for x in times) / len(times)) if all(x > 0 for x in times) else 0
+
+        print(f"{algo:<25} | {mean:.6f} | {stdev:.6f}        | {geo_mean:.6f}")
+
+    print("\nСтатистика по размерам матриц:")
+    print(f"{'Размер':<8} | {'Алгоритм':<25} | {'Среднее':<8} | {'Ст. отклонение':<15} | {'Ср. геом.':<10}")
+    print("-" * 80)
+
+    for size, benchmark in zip([16, 32, 64, 128, 256], benchmarks):
+        for algo in algos:
+            times = [res[algo] for res in results if f'Matrix {size}' in benchmark]
+            if not times:
+                continue
+
+            mean = statistics.mean(times)
+            stdev = statistics.stdev(times) if len(times) > 1 else 0
+            geo_mean = math.exp(sum(math.log(x) for x in times) / len(times)) if all(x > 0 for x in times) else 0
+
+            print(f"{size:<8} | {algo:<25} | {mean:.6f} | {stdev:.6f}        | {geo_mean:.6f}")
+
