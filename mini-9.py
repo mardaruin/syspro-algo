@@ -2,25 +2,28 @@ import random
 import string
 
 def lsd_radix_sort(strings):
+    if not strings:
+        return []
+
     max_length = len(max(strings, key=len))
+    temp = [None] * len(strings)
 
     for i in range(max_length - 1, -1, -1):
-        buckets = {}
-        #buckets = [[] for _ in range(256)]
+        count = [0] * 257
 
         for string in strings:
-            if i < len(string):
-                char_code = ord(string[i])
-            else:
-                char_code = 0
+            char_code = ord(string[i]) if i < len(string) else 0
+            count[char_code + 1] += 1
 
-            if char_code not in buckets:
-                buckets[char_code] = []
-            buckets[char_code].append(string)
+        for j in range(256):
+            count[j + 1] += count[j]
 
-        strings = []
-        for char_code in sorted(buckets.keys()):
-            strings.extend(buckets[char_code])
+        for string in strings:
+            char_code = ord(string[i]) if i < len(string) else 0
+            temp[count[char_code]] = string
+            count[char_code] += 1
+
+        strings = temp.copy()
 
     return strings
 

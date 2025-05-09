@@ -7,12 +7,12 @@ def kth(array: list, k: int) -> int:
     if len(array) == 1:
         return array[0]
 
-    pivot_idx = random.randint(0, len(array) - 1)
-    pivot = array[pivot_idx]
+    pivot = random.choice(array)
 
     left = [x for x in array if x < pivot]
     middle = [x for x in array if x == pivot]
     right = [x for x in array if x > pivot]
+
 
     if k <= len(left):
         return kth(left, k)
@@ -27,13 +27,13 @@ def find_optimal_position(skewers):
     n = len(ys)
 
     if n % 2 == 1:
-        median_y = kth(ys, n // 2)
+        median_y = kth(ys, n // 2 + 1)
     else:
-        median_y = (kth(ys, n // 2 - 1), kth(ys, n // 2)) / 2
+        median_y = (kth(ys, n // 2 - 1) + kth(ys, n // 2)) / 2
 
     return median_y
 
 
-skewers = [(0, 24), (5, 15), (10, 16)]
+skewers = [(0, 24), (5, 15), (10, 16), (34, 20)]
 optimal_y = find_optimal_position(skewers)
 print(f"Оптимальная позиция магистрали: {optimal_y}")
