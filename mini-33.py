@@ -19,13 +19,13 @@ class Solution:
         def union(u, v):
             pu, pv = find(u), find(v)
             if pu != pv:
-                #if rank[pu] > rank[pv]:
-                    #parent[pv] = pu
-                #elif rank[pu] < rank[pv]:
-                parent[pu] = pv
-                #else:
-                    #parent[pv] = pu
-                rank[pu] += 1
+                if rank[pu] > rank[pv]:
+                    parent[pv] = pu
+                elif rank[pu] < rank[pv]:
+                    parent[pu] = pv
+                else:
+                    parent[pv] = pu
+                    rank[pu] += 1
                 return True
             return False
 
@@ -35,7 +35,7 @@ class Solution:
         for idx, (penalty, deadline) in enumerate(tasks):
             found_slot = False
             for t in reversed(range(1, deadline + 1)):
-                if find(t) == t:
+                if find(t) != find(t - 1):
                     found_slot = True
                     schedule[t - 1] = idx
                     union(t, t-1)
