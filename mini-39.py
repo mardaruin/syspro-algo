@@ -39,8 +39,8 @@ def merge(l, r):
         update_sum(r)
         return r
 
-def insert(root, key):
-    new_node = TreapNode(key)
+def insert(root, key, pr=None):
+    new_node = TreapNode(key, pr)
     if not root:
         return new_node
     l, r = split(root, key)
@@ -92,7 +92,7 @@ print("Сумма элементов от 1 до 3:", range_sum(root, 12, 20))  
 
 
 root = None
-arr = [5, 7, 10, 100, 135]
-for num in arr:
-    root = insert(root, num)
-print("Сумма элементов от 2 до 4:", range_sum(root, 100, 139))   # 235
+arr = [(5, 2), (7, 1), (10, 4), (100, 3), (135, 5)]
+for num, pr in arr:
+    root = insert(root, num, pr)
+print("Сумма элементов от 2 до 4:", range_sum(root, 1, 4))   # 0
