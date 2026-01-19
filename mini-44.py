@@ -17,6 +17,7 @@ class PersistentQueue:
         self.last = None
         self.list_ptr = None
         self.build_list_ptr = None
+        self.count_intermediate = 0
 
     def push(self, val):
         node = Node(val, self.last)
@@ -28,9 +29,10 @@ class PersistentQueue:
         queue.last = node
         queue.list_ptr = self.list_ptr
         queue.build_list_ptr = self.build_list_ptr
+        queue.count_intermediate = self.count_intermediate + 1
 
         if self.build_list_ptr is None:
-            int_count = self.count_intermediate_nodes()
+            int_count = self.count_intermediate
             if int_count > 0 and 2 * len(self.get_list()) <= int_count:
                 new_list_node = ListNode(node.parent)
                 new_list_node.next = None
@@ -51,9 +53,10 @@ class PersistentQueue:
         queue.last = self.last
         queue.list_ptr = self.list_ptr
         queue.build_list_ptr = self.build_list_ptr
+        queue.count_intermediate = self.count_intermediate - 1
 
         if self.list_ptr is None:
-            int_count = self.count_intermediate_nodes()
+            int_count = self.count_intermediate
             if int_count >= 1:
                 if self.build_list_ptr is not None:
                     last_build_list_node = self.build_list_ptr
@@ -65,14 +68,6 @@ class PersistentQueue:
 
         return queue
 
-
-    def count_intermediate_nodes(self):
-        c = 0
-        node = self.last
-        while node != self.first:
-            c += 1
-            node = node.parent
-        return c
 
     def get_list(self):
         result = []
